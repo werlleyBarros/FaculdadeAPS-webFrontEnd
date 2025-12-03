@@ -7,7 +7,22 @@
     <title>To-do-list</title>
 </head>
 <body>
-    
+    <button onclick="mostrarFormulario()">criar tarefa</button> 
+    <div id= "formularioTasks"class="formularioTasks">
+        <form id="formTasks">
+            <label for="">Titulo</label>
+            <input type="text" name="tituloTarefa" id="tituloTarefa" autocomplete="off">
+            <label for="">Descrição</label>
+            <input type="text" name="descricaoTarefa" id="descricaoTarefa" autocomplete="off">
+            <label for="">prazo de entrega</label>
+            <input type="date" name="dataTarefa" id="dataTarefa" autocomplete="off">
+            <button type="submit" onclick="criarTask()">Enviar</button>
+        </form>
+    </div>
+    <div class="tarefasContainer" id="tarefasContainer">
+
+    </div>
 </body>
 <script src="script.js"></script>
+<script>carregarTasks()</script>
 </html>
