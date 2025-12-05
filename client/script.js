@@ -1,11 +1,11 @@
-const baseUrl = "https://verbose-fishstick-v6jjqpv7ppxgcpjx9-8000.app.github.dev";
+const baseUrl = "https://expert-goldfish-v6qrg77w64x5hp7vj-8000.app.github.dev";
 
 async function Cadastro() {
 
     const url = baseUrl + "/auth/signup"
     const nome = document.getElementById("nomeInput").value;
-    const email = document.getElementById("emailImput").value;
-    const senha = document.getElementById("senhaImput").value;
+    const email = document.getElementById("emailInput").value;
+    const senha = document.getElementById("senhaInput").value;
 
     const payLoad = {
         name: nome,
@@ -40,8 +40,8 @@ async function Cadastro() {
 
 async function login(){
     const url = baseUrl + "/auth/login"
-    const email = document.getElementById("emailImput").value;
-    const senha = document.getElementById("senhaImput").value;
+    const email = document.getElementById("emailInput").value;
+    const senha = document.getElementById("senhaInput").value;
 
     const payLoad = {
         email: email,

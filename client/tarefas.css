@@ -1,0 +1,102 @@
+/* css/tarefas.css */
+
+/* 1. O CORPO DA PÁGINA */
+body {
+    display: flex;
+    flex-direction: column; /* Garante que as coisas fiquem uma EMBAIXO da outra */
+    align-items: center;    /* Centraliza tudo horizontalmente */
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow-x: hidden; /* Evita rolagem lateral indesejada */
+}
+
+/* 2. O BOTÃO "CRIAR TAREFA" (Topo) */
+/* O seletor body > button pega o botão que está solto no HTML */
+body > button {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 300px; /* Limita a largura para não ficar gigante */
+    /* Mantém o estilo roxo do style.css principal */
+}
+
+/* 3. O FORMULÁRIO (Abaixo do botão) */
+.formularioTasks {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 40px; /* Espaço entre o form e as tarefas */
+    
+    /* O JS controla o display: none/block, aqui controlamos o visual */
+}
+
+/* 4. O CONTAINER DAS TAREFAS (A área dos quadrados vermelhos) */
+.tarefasContainer {
+    width: 100%;
+    max-width: 1200px; /* Largura máxima da grade */
+    
+    display: grid; 
+    /* AQUI ESTÁ A MÁGICA DOS QUADRADOS: */
+    /* Cria colunas automáticas de no mínimo 300px */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 20px; /* Espaço entre os quadrados */
+    
+    justify-content: center;
+}
+
+/* 5. O CARD DA TAREFA (O quadrado em si) */
+.tarefa-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid #7D2AE8; /* Detalhe roxo no topo do card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px; /* Altura mínima para ficarem quadrados bonitos */
+    transition: transform 0.3s;
+}
+
+.tarefa-card:hover {
+    transform: translateY(-5px); /* Efeito de flutuar ao passar o mouse */
+}
+
+.tarefa-card h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.tarefa-card p {
+    color: #666;
+    font-size: 0.9rem;
+    flex-grow: 1; /* Faz o texto ocupar o espaço vazio */
+}
+
+.tarefa-card .prazo {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* Botões de dentro do Card */
+.acoes-card {
+    display: flex;
+    gap: 10px;
+}
+
+.acoes-card button {
+    margin-top: 0; /* Remove margem antiga */
+    font-size: 0.9rem;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.btn-editar { background-color: #ffc107; color: #333; }
+.btn-deletar { background-color: #ff4d4d; color: white; }

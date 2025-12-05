@@ -1,0 +1,101 @@
+/* style.css - Serve para Login e Cadastro */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Configuração Geral da Página */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* AQUI ESTÁ O TRUQUE: 
+   A vírgula diz para aplicar esse estilo no Login E no Cadastro 
+*/
+#formularioLogin, 
+#formularioCadastro {
+    background-color: white;
+    width: 100%;
+    max-width: 400px; /* Tamanho máximo bom para ambos */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo dos Textos (Labels) */
+label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* Inputs (Serve para texto, email e senha) */
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+input:focus {
+    border-color: #7D2AE8;
+    box-shadow: 0 0 0 3px rgba(125, 42, 232, 0.1);
+}
+
+/* Botão Roxo (Serve para ambos) */
+button {
+    background-color: #7D2AE8;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #5f1eb5;
+}
+
+/* Links e textos extras */
+p {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center; /* Centraliza o texto "Não possui conta?" */
+}
+
+a {
+    color: #7D2AE8;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h2{
+    text-align: center;
+    color: #7D2AE8;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
