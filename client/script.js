@@ -1,75 +1,241 @@
-const baseUrl = "https://expert-goldfish-v6qrg77w64x5hp7vj-8000.app.github.dev";
+const baseUrl = "https://expert-zebra-r7rw99599j7hppx5-8000.app.github.dev";
 
-async function Cadastro() {
+async function apiRequest(endpoint, method = "GET", body = null, usaToken = true){
+    const url = baseUrl + endpoint
 
-    const url = baseUrl + "/auth/signup"
-    const nome = document.getElementById("nomeInput").value;
-    const email = document.getElementById("emailInput").value;
-    const senha = document.getElementById("senhaInput").value;
-
-    const payLoad = {
-        name: nome,
-        email: email,
-        password: senha,
+    const headers = {
+        "Content-Type": "application/json"
     };
-    console.log(payLoad)
 
-    try {
-        const resp = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(payLoad),
-            headers: {'Content-Type': 'application/json',},
-        }); 
+    if (usaToken) {
+        const token = localStorage.getItem("Token");
+        if (token) headers["authorization"] = "Bearer " + token;
+    }else{
 
-        if (!resp.ok){
-            throw new Error("Erro ao enviar formulario");
-        }
+    }
 
-        const respJson = await resp.json();
+    const options = {
+        method,
+        headers,
+    }
+    console.log(options);
+    if (body) {
+        options.body = JSON.stringify(body);
+    };
+    
+    const resp = await fetch(url, options);
+    console.log(resp)
+    if (!resp.ok) {
+        throw new Error(resp?.message || `Erro na requisição (${resp.status})`);
+    };
+
+    let data;
+
+    try{
+        data = await resp.json();
+    }catch{
+        data = null
+    };
+    
+    return data;
+};
+
+const api = {
+    signup: (data) => apiRequest("/auth/signup", "POST", data, false),
+    login: (data) => apiRequest("/auth/login", "POST", data, false),
+    getTask: () => apiRequest("/tasks"),
+    createTask: (data) => apiRequest("/tasks", "POST", data),
+    editTask: (id, data) => apiRequest("/tasks/" + id, "PUT", data),
+    deleteTask: (id) => apiRequest("/tasks/" + id, "DELETE"),
+};
+
+const auth = {
+    signup: async function cadastrar(nome, email, senha){
         
-        console.log(respJson);
-        localStorage.setItem("Token", respJson.access_token);
-        alert("Cadastrado com sucesso")
-        window.location.href = 'tarefas.html';
+        const payLoad = { name: nome, email: email, password: senha,};
+        const resp = await api.signup(payLoad);
+        localStorage.setItem("Token", resp.access_token);
+        console.log(localStorage.getItem("Token"))
+        return resp;
+    },
 
-    } catch(erro) {
-        console.error(erro);
-        alert("Deu ruim ao enviar formulario")
+    login: async function logar(email, senha){
+
+        const payLoad = {email: email, password: senha};
+        const resp = await api.login(payLoad);
+        console.log("Resposta do login/signup:", resp);
+        console.log("Token retornado:", resp?.access_token);
+        localStorage.setItem("Token", resp.access_token)
+
+        return resp;
     }
 };
 
-async function login(){
-    const url = baseUrl + "/auth/login"
-    const email = document.getElementById("emailInput").value;
-    const senha = document.getElementById("senhaInput").value;
+const tasks = {
+    getAll: async function carregarTasks(){
+        const resp = await api.getTask();
+        return resp;
+    },
+    create: async function criarTask(titulo, descricao, prazoEntrega){
+        const payLoad = {title: titulo, description: descricao, deadline: prazoEntrega};
+        const resp = await api.createTask(payLoad);
+        return resp;
+    },
+    update: async function editarTasks(titulo, descricao, prazoEntrega, id){
+        const payLoad = {title: titulo, description: descricao, deadline: prazoEntrega};
+        const resp = await api.editTask(id, payLoad);
+        return resp;
+    },
+    remove: async function deletarTask(id){
+        const resp = await api.deleteTask(id)
+        return resp;
+    },
+};
 
-    const payLoad = {
-        email: email,
-        password: senha,
+const manipuladorUser = {
+    htmlLogin: async function manipuladorLogin(){
+        const email = document.getElementById("emailInput").value;
+        const senha = document.getElementById("senhaInput").value;
+
+        try{
+            const resp = await auth.login(email, senha);
+            alert("Sucesso ao enviar")
+            if (localStorage.getItem("Token")) {
+                window.location.href = "tarefas.html";
+            };
+        }catch(erro){
+            alert(erro.message);
+        }
+    },
+
+    htmlCadastro: async function manipuladorCadastro(){
+        const nome = document.getElementById("nomeInput").value;
+        const email = document.getElementById("emailInput").value;
+        const senha = document.getElementById("senhaInput").value;
+
+        try{
+            const resp = await auth.signup(nome, email, senha);
+            alert("Cadastrado com sucesso")
+            if (localStorage.getItem("Token")) {
+                window.location.href = "tarefas.html";
+            };
+        }catch(erro){
+            alert(erro.message);
+        }
+    },
+
+    htmlShowAllTasks: async function  carregarTasks(){
+        try {
+            const resp = await api.getTask()
+            resp.tasks.forEach(task => criarTaskCard(task))
+        }catch(erro){
+            alert(erro.message);
+        };
+    },
+};
+/*
+async function carregarTasks() {
+    
+    try {
+        const resp = api.getTask()
+        resp.tasks.forEach(task => criarTaskCard(task))
+
+    } catch (erro) {
+        alert(erro.message);
     }
-    console.log(payLoad);
+};*/
+
+async function criarTask(){
+    event.preventDefault();
+    
+    const url = baseUrl + "/tasks"
+
+    const titulo = document.getElementById("tituloTarefa").value;
+    const descrição = document.getElementById("descricaoTarefa").value;
+    const prazoEntrega = document.getElementById("dataTarefa").value;
+
+    const payload = {
+        title: titulo,
+        description: descrição,
+        deadline: prazoEntrega,
+    };
+
+    try {
+        const resp = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": "Bearer " + localStorage.getItem("Token")
+            },
+        });
+        console.log(resp);
+
+        if (!resp.ok) {
+            throw new Error("Erro ao enviar formulario");
+        };
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Erro ao enviar sua formulario");
+    };
+};
+
+async function EnviarTaskEdicao(taskId){
+    event.preventDefault();
+    
+    const url = baseUrl + "/tasks/" + taskId
+    console.log(url)
+    const titulo = document.getElementById("novoTitulo").value;
+    const descrição = document.getElementById("novaDescricao").value;
+    const prazoEntrega = document.getElementById("novaData").value;
+
+    const payload = {
+        title: titulo,
+        description: descrição,
+        deadline: prazoEntrega,
+    };
+
+    try {
+        const resp = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": "Bearer " + localStorage.getItem("Token")
+            },
+        });
+        console.log(resp);
+
+        if (!resp.ok) {
+            throw new Error("Erro ao enviar formulario");
+            
+        };
+        alert("Deu certo");
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Erro ao enviar sua formulario");
+    };
+};
+
+async function deleteTask(taskId){
+    const url = baseUrl + "/tasks/" + taskId
     try{
-        const resp = await fetch(url,{
-            method: 'POST',
-            body: JSON.stringify(payLoad),
-            headers: {'Content-Type': 'application/json',},
+        const resp = await fetch(url, {
+           method: "DELETE",
+           headers: {
+            'Content-Type': 'application/json',
+            "authorization": "Bearer " + localStorage.getItem("Token"),
+        },
+           
         });
 
-        if (!resp.ok){
-            throw new Error("Erro ao enviar formulario");
-        }
-
-        const respJson = await resp.json();
-        
-        console.log(respJson);
-        alert("Sucesso ao enviar")
-        localStorage.setItem("Token", respJson.access_token);
-        window.location.href = 'tarefas.html';
-
-    } catch(erro){
+    }catch(erro){
         console.error(erro)
         alert("Deu ruim ao enviar formulario")
-    }
+    };
+
 };
 
 function criarTaskCard(task){
@@ -152,90 +318,6 @@ function editarTask(taskId){
 
 };
 
-async function EnviarTaskEdicao(taskId){
-    event.preventDefault();
-    
-    const url = baseUrl + "/tasks/" + taskId
-    console.log(url)
-    const titulo = document.getElementById("novoTitulo").value;
-    const descrição = document.getElementById("novaDescricao").value;
-    const prazoEntrega = document.getElementById("novaData").value;
-
-    const payload = {
-        title: titulo,
-        description: descrição,
-        deadline: prazoEntrega,
-    };
-
-    try {
-        const resp = await fetch(url, {
-            method: "PUT",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": "Bearer " + localStorage.getItem("Token")
-            },
-        });
-        console.log(resp);
-
-        if (!resp.ok) {
-            throw new Error("Erro ao enviar formulario");
-            
-        };
-        alert("Deu certo");
-
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro ao enviar sua formulario");
-    };
-};
-
-async function deleteTask(taskId){
-    const url = baseUrl + "/tasks/" + taskId
-    try{
-        const resp = await fetch(url, {
-           method: "DELETE",
-           headers: {
-            'Content-Type': 'application/json',
-            "authorization": "Bearer " + localStorage.getItem("Token"),
-        },
-           
-        });
-
-    }catch(erro){
-        console.error(erro)
-        alert("Deu ruim ao enviar formulario")
-    };
-
-};
-
-async function carregarTasks() {
-    const url = baseUrl + "/tasks";
-    
-    try {
-        const resp = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": "Bearer " + localStorage.getItem("Token")
-            },
-        });
-        console.log(resp);
-
-        if (!resp.ok) {
-            throw new Error("Erro ao fazer requisição GET");
-        };
-
-        const data = await resp.json();
-        console.log(data);
-        data.tasks.forEach(task => criarTaskCard(task))
-
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro ao carregar dados");
-    }
-};
-
 function mostrarFormulario(){
     const formulario = document.getElementById("formularioTasks")
 
@@ -244,40 +326,4 @@ function mostrarFormulario(){
     }else{
         formulario.style.display = "none"        
     }
-};
-
-async function criarTask(){
-    event.preventDefault();
-    
-    const url = baseUrl + "/tasks"
-
-    const titulo = document.getElementById("tituloTarefa").value;
-    const descrição = document.getElementById("descricaoTarefa").value;
-    const prazoEntrega = document.getElementById("dataTarefa").value;
-
-    const payload = {
-        title: titulo,
-        description: descrição,
-        deadline: prazoEntrega,
-    };
-
-    try {
-        const resp = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": "Bearer " + localStorage.getItem("Token")
-            },
-        });
-        console.log(resp);
-
-        if (!resp.ok) {
-            throw new Error("Erro ao enviar formulario");
-        };
-
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro ao enviar sua formulario");
-    };
 };
