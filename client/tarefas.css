@@ -2,7 +2,6 @@
 
 /* 1. O CORPO DA PÁGINA */
 body {
-    display: flex;
     flex-direction: column; /* Garante que as coisas fiquem uma EMBAIXO da outra */
     align-items: center;    /* Centraliza tudo horizontalmente */
     min-height: 100vh;
@@ -38,7 +37,6 @@ body > button {
 .tarefasContainer {
     width: 100%;
     max-width: 1200px; /* Largura máxima da grade */
-    
     display: grid; 
     /* AQUI ESTÁ A MÁGICA DOS QUADRADOS: */
     /* Cria colunas automáticas de no mínimo 300px */

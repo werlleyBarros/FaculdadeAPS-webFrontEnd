@@ -36,7 +36,7 @@ async function apiRequest(endpoint, method = "GET", body = null, usaToken = true
     }catch{
         data = null
     };
-    
+    console.log(data)
     return data;
 };
 
@@ -79,6 +79,7 @@ const tasks = {
     create: async function criarTask(titulo, descricao, prazoEntrega){
         const payLoad = {title: titulo, description: descricao, deadline: prazoEntrega};
         const resp = await api.createTask(payLoad);
+        console.log(resp);
         return resp;
     },
     update: async function editarTasks(titulo, descricao, prazoEntrega, id){
@@ -132,53 +133,19 @@ const manipuladorUser = {
             alert(erro.message);
         };
     },
-};
-/*
-async function carregarTasks() {
-    
-    try {
-        const resp = api.getTask()
-        resp.tasks.forEach(task => criarTaskCard(task))
 
-    } catch (erro) {
-        alert(erro.message);
-    }
-};*/
+    htmlCreateTask: async function criarTask(event){
+        event.preventDefault();
 
-async function criarTask(){
-    event.preventDefault();
-    
-    const url = baseUrl + "/tasks"
-
-    const titulo = document.getElementById("tituloTarefa").value;
-    const descrição = document.getElementById("descricaoTarefa").value;
-    const prazoEntrega = document.getElementById("dataTarefa").value;
-
-    const payload = {
-        title: titulo,
-        description: descrição,
-        deadline: prazoEntrega,
-    };
-
-    try {
-        const resp = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": "Bearer " + localStorage.getItem("Token")
-            },
-        });
-        console.log(resp);
-
-        if (!resp.ok) {
-            throw new Error("Erro ao enviar formulario");
+        const titulo = document.getElementById("tituloTarefa").value;
+        const descricao = document.getElementById("descricaoTarefa").value;
+        const prazoEntrega = document.getElementById("dataTarefa").value;
+        try{
+            const resp = await tasks.create(titulo, descricao, prazoEntrega);
+        }catch(erro){
+            alert(erro.message);
         };
-
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro ao enviar sua formulario");
-    };
+    },
 };
 
 async function EnviarTaskEdicao(taskId){
