@@ -2,6 +2,7 @@
 
 /* 1. O CORPO DA PÁGINA */
 body {
+    display: block;
     flex-direction: column; /* Garante que as coisas fiquem uma EMBAIXO da outra */
     align-items: center;    /* Centraliza tudo horizontalmente */
     min-height: 100vh;

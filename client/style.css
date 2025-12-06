@@ -6,6 +6,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f4f4;
+    display: block;
     align-items: center;
     justify-content: center;
     height: 100vh;
@@ -97,4 +98,11 @@ h2{
     margin-top: 0;
     margin-bottom: 25px;
     font-weight: 700;
+}
+
+#formularios{
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%, -50%)
 }
