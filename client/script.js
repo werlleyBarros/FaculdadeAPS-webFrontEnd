@@ -1,34 +1,51 @@
+/*
+    Código está organizado em 5 módulos: api, auth, tasks, manipuladorUser e domUser.
+
+    -api: Módulo que usa a função utilitária apiRequest para enviar todas as funções para o servidor.
+
+    -auth: Funções de login e cadastro do sistema.
+
+    -tasks: Funções responsaveis pelo CRUD (create, read, update e delete).
+
+    -manipuladorUser: Funções para coletar informações do html e enviar para auth ou tasks.
+
+    -domUser: Funções para manipular o Html dinamicamente.
+*/
+
+//url do servidor
 const baseUrl = "https://expert-zebra-r7rw99599j7hppx5-8000.app.github.dev";
-
+/* 
+    função utilitaria para envio do servidor. de argumento obrigatorio somente endpoint (parte final da url).
+    caso não envie nenhum outro parametro, usa o que está depois de = como padrão.
+*/
 async function apiRequest(endpoint, method = "GET", body = null, usaToken = true){
-    const url = baseUrl + endpoint
-
+    // url que irá enviar as requisições
+    const url = baseUrl + endpoint 
+    //informa ao servidor os dados que estão sendo enviados
     const headers = {
         "Content-Type": "application/json"
     };
-
+    // se usaToken for verdadeiro pegará o token de segurança guardado e adicionará ao headers.
     if (usaToken) {
         const token = localStorage.getItem("Token");
         if (token) headers["authorization"] = "Bearer " + token;
-    }else{
-
-    }
-
+    };
+    // um objeto que junta tudo para enviar ao servidor.
     const options = {
         method,
         headers,
-    }
-    console.log(options);
+    };
+    // se possuir um body para enviar, irá adicionar ao objeto options.
     if (body) {
         options.body = JSON.stringify(body);
     };
-    
+    // envia usando fetch a url final e o objeto options ao servidor e recebe a resposta do servidor
     const resp = await fetch(url, options);
-    console.log(resp)
+    // se a requisição der algum erro retorna um erro e mostra uma mensagem ou o status do erro
     if (!resp.ok) {
         throw new Error(resp?.message || `Erro na requisição (${resp.status})`);
     };
-
+    // cria uma variavel data que irá receber o JSON do servidor caso exista
     let data;
 
     try{
@@ -36,10 +53,10 @@ async function apiRequest(endpoint, method = "GET", body = null, usaToken = true
     }catch{
         data = null
     };
-    console.log(data)
+    // retorna o JSON, se não existir retorna null.
     return data;
 };
-
+// todas as funções que conectam com a api do servidor.
 const api = {
     signup: (data) => apiRequest("/auth/signup", "POST", data, false),
     login: (data) => apiRequest("/auth/login", "POST", data, false),
@@ -48,7 +65,7 @@ const api = {
     editTask: (id, data) => apiRequest("/tasks/" + id, "PUT", data),
     deleteTask: (id) => apiRequest("/tasks/" + id, "DELETE"),
 };
-
+// funções que conectam com a parte auth da api
 const auth = {
     signup: async function cadastrar(nome, email, senha){
         
@@ -70,7 +87,7 @@ const auth = {
         return resp;
     }
 };
-
+// funções que conectam com a parte tasks da api
 const tasks = {
     getAll: async function carregarTasks(){
         const resp = await api.getTask();
@@ -92,7 +109,7 @@ const tasks = {
         return resp;
     },
 };
-
+// funções que recebe os dados do html
 const manipuladorUser = {
     htmlLogin: async function manipuladorLogin(){
         const email = document.getElementById("emailInput").value;
@@ -173,7 +190,7 @@ const manipuladorUser = {
         };
     },
 };
-
+// funções auxiliares para criação das coisas no html.
 const domUser = {
    cTaskCard: function criarTask(task){
         const fragment = document.createDocumentFragment();
