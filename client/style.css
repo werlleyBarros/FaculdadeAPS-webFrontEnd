@@ -1,4 +1,4 @@
-/* style.css - Serve para Login e Cadastro */
+/* Serve para Login e Cadastro */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
@@ -19,7 +19,6 @@ body {
 #formularioLogin, 
 #formularioCadastro {
     background-color: white;
-    width: 100%;
     max-width: 400px; /* Tamanho máximo bom para ambos */
     padding: 40px;
     border-radius: 20px;
@@ -39,7 +38,6 @@ label {
 
 /* Inputs (Serve para texto, email e senha) */
 input {
-    width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -67,7 +65,6 @@ button {
     cursor: pointer;
     margin-top: 30px;
     transition: background 0.3s;
-    width: 100%;
 }
 
 button:hover {

@@ -1,8 +1,6 @@
-/* css/tarefas.css */
-
 /* 1. O CORPO DA PÁGINA */
 body {
-    display: block;
+    display: flex;
     flex-direction: column; /* Garante que as coisas fiquem uma EMBAIXO da outra */
     align-items: center;    /* Centraliza tudo horizontalmente */
     min-height: 100vh;
@@ -16,14 +14,12 @@ body {
 body > button {
     margin-top: 20px;
     margin-bottom: 30px;
-    width: 100%;
     max-width: 300px; /* Limita a largura para não ficar gigante */
     /* Mantém o estilo roxo do style.css principal */
 }
 
 /* 3. O FORMULÁRIO (Abaixo do botão) */
 .formularioTasks {
-    width: 100%;
     max-width: 500px;
     background: white;
     padding: 30px;
@@ -36,7 +32,6 @@ body > button {
 
 /* 4. O CONTAINER DAS TAREFAS (A área dos quadrados vermelhos) */
 .tarefasContainer {
-    width: 100%;
     max-width: 1200px; /* Largura máxima da grade */
     display: grid; 
     /* AQUI ESTÁ A MÁGICA DOS QUADRADOS: */
