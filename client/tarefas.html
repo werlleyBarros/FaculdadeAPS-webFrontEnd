@@ -10,7 +10,7 @@
     <title>To-do-list</title>
 </head>
 <body>
-    <button onclick="mostrarFormulario()">criar tarefa</button> 
+    <button onclick="domUser.mostrarFormulario()">criar tarefa</button> 
     <div id= "formularioTasks" class="formularioTasks" >
         <form id="formTasks" onsubmit="manipuladorUser.htmlCreateTask(event)">
             <label for="">Titulo</label>
@@ -27,5 +27,9 @@
     </div>
 </body>
 <script src="script.js"></script>
-<script>manipuladorUser.htmlShowAllTasks()</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    manipuladorUser.htmlShowAllTasks().catch(err => console.error(err));
+});
+</script>
 </html>

@@ -1,4 +1,4 @@
-const baseUrl = "https://glowing-adventure-v6qrg77w64wr3p595-8000.app.github.dev";
+const baseUrl = "https://expert-zebra-r7rw99599j7hppx5-8000.app.github.dev";
 
 async function apiRequest(endpoint, method = "GET", body = null, usaToken = true){
     const url = baseUrl + endpoint
@@ -128,7 +128,7 @@ const manipuladorUser = {
     htmlShowAllTasks: async function  carregarTasks(){
         try {
             const resp = await api.getTask()
-            resp.tasks.forEach(task => criarTaskCard(task))
+            resp.tasks.forEach(task => domUser.cTaskCard(task))
         }catch(erro){
             alert(erro.message);
         };
@@ -145,152 +145,118 @@ const manipuladorUser = {
         }catch(erro){
             alert(erro.message);
         };
+
+        
+    },
+
+    htmlDeleteTask: async function removeTask(id){
+        try{
+            const resp = await tasks.remove(id);
+            document.getElementById("tarefa-" + id).remove(); 
+        }catch(erro){
+            alert(erro.message);
+        };
+          
+    },
+
+    htmlEditTask: async function taskEdicao(id, event){
+        event.preventDefault();
+
+        const titulo = document.getElementById("novoTitulo").value;
+        const descricao = document.getElementById("novaDescricao").value;
+        const prazoEntrega = document.getElementById("novaData").value;
+
+        try{
+            const resp = await tasks.update(titulo, descricao, prazoEntrega, id)
+        }catch(erro){
+            alert(erro.message)
+        };
     },
 };
 
-async function EnviarTaskEdicao(taskId){
-    event.preventDefault();
-    
-    const url = baseUrl + "/tasks/" + taskId
-    console.log(url)
-    const titulo = document.getElementById("novoTitulo").value;
-    const descrição = document.getElementById("novaDescricao").value;
-    const prazoEntrega = document.getElementById("novaData").value;
+const domUser = {
+   cTaskCard: function criarTask(task){
+        const fragment = document.createDocumentFragment();
 
-    const payload = {
-        title: titulo,
-        description: descrição,
-        deadline: prazoEntrega,
-    };
+        const card = document.createElement("div");
+        card.classList.add("tarefa-card");
+        card.id = "tarefa-"+ task.id;
 
-    try {
-        const resp = await fetch(url, {
-            method: "PUT",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": "Bearer " + localStorage.getItem("Token")
-            },
-        });
-        console.log(resp);
+        const titulo = document.createElement("h3");
+        titulo.textContent = task.title;
+        card.appendChild(titulo);
 
-        if (!resp.ok) {
-            throw new Error("Erro ao enviar formulario");
-            
-        };
-        alert("Deu certo");
+        const description = document.createElement("p");
+        description.textContent = task.description;
+        card.appendChild(description);
 
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro ao enviar sua formulario");
-    };
-};
+        const deadline = document.createElement("p")
+        deadline.textContent = "Prazo final: " + task.deadline;
+        card.appendChild(deadline);
 
-async function deleteTask(taskId){
-    const url = baseUrl + "/tasks/" + taskId
-    try{
-        const resp = await fetch(url, {
-           method: "DELETE",
-           headers: {
-            'Content-Type': 'application/json',
-            "authorization": "Bearer " + localStorage.getItem("Token"),
-        },
-           
-        });
+        const botaoEditar = this.cBotao("Editar", "botaoEditar", this.cFormEdit.bind(this, task.id))
+        card.appendChild(botaoEditar);
 
-    }catch(erro){
-        console.error(erro)
-        alert("Deu ruim ao enviar formulario")
-    };
+        const botaoDeletar = this.cBotao("Deletar", "botaoDeletar", manipuladorUser.htmlDeleteTask.bind(null, task.id))
+        card.appendChild(botaoDeletar);
 
-};
+        fragment.appendChild(card);
 
-function criarTaskCard(task){
+        document.getElementById("tarefasContainer").appendChild(fragment);
+   },
 
-    const card = document.createElement("div");
-    card.classList.add("tarefa-card");
-    card.id = "tarefa-"+ task.id;
+   cFormEdit: function formularioEdit(id){
+        const fragment = document.createDocumentFragment();
 
-    const titulo = document.createElement("h3");
-    titulo.textContent = task.title;
-    card.appendChild(titulo);
+        const formEditarTask = document.getElementById("tarefa-" + id);
 
-    const description = document.createElement("p");
-    description.textContent = task.description;
-    card.appendChild(description);
+        if (formEditarTask.querySelector("form")) return;
 
-    const deadline = document.createElement("p")
-    deadline.textContent = "Prazo final: " + task.deadline;
-    card.appendChild(deadline);
+        const tituloAtual = formEditarTask.querySelector("h3").innerText;
+        const descricaoAtual = formEditarTask.querySelector("p").innerText;
 
-    const botaoEditar = document.createElement("button");
-    botaoEditar.textContent = "Editar";
-    botaoEditar.classList.add("botaoEditar");
-    botaoEditar.setAttribute('onclick', 'editarTask('+ task.id +')');
-    card.appendChild(botaoEditar);
+        const form = document.createElement("form");
 
-    const botaoDeletar = document.createElement("button");
-    botaoDeletar.textContent = "Deletar";
-    botaoDeletar.classList.add("botaoDeletar");
-    botaoDeletar.setAttribute('onclick', 'deleteTask('+ task.id +')');
-    card.appendChild(botaoDeletar);
+        const inputTitulo = this.cInput("text","novoTitulo","novoTitulo", "Novo Titulo", tituloAtual);
+        const inputDescricao = this.cInput("text", "novaDescricao", "novaDescricao", "Nova descrição", descricaoAtual);
+        const inputData = this.cInput("date", "novaData", "novaData", "", formEditarTask);
 
-    const container = document.getElementById("tarefasContainer");
-    container.appendChild(card);
+        const botaoSalvar = this.cBotao("Salvar", "botaoSalvar", (event) => manipuladorUser.htmlEditTask(id, event));
 
-};
+        form.append(inputTitulo, inputDescricao, inputData, botaoSalvar);
+        formEditarTask.appendChild(form);
+        fragment.appendChild(formEditarTask)
+        
+        document.getElementById("tarefasContainer").appendChild(fragment);
+   },
 
-function editarTask(taskId){
-    const formEditarTask = document.getElementById("tarefa-" + taskId)
+   cBotao: function criarBotao(texto, classe, acao){
+        const botao = document.createElement("button");
+        botao.textContent = texto;
+        botao.classList.add(classe);
+        botao.type = "button";
+        botao.onclick = acao;
+        return botao
+   },
 
-    if (formEditarTask.querySelector("form")) return;
+   cInput: function criarInput(type, name, id, placeholder = "",value = ""){
+        const input = document.createElement("input");
 
-    const tituloAtual = formEditarTask.querySelector("h3").innerText;
-    const descricaoAtual = formEditarTask.querySelector("p").innerText;
+        input.type = type;
+        input.name = name;
+        input.id = id;
+        input.placeholder = placeholder;
+        if (value) input.value = value;
+        return input;
+   },
 
-    const form = document.createElement("form");
+   tasksForm: function mostrarFormulario(){
+        const formulario = document.getElementById("formularioTasks")
 
-    const inputTitulo = document.createElement("input");
-    inputTitulo.type = "text";
-    inputTitulo.name = "novoTitulo";
-    inputTitulo.id = "novoTitulo";
-    inputTitulo.value = null;
-    inputTitulo.placeholder = "Novo Titulo"
-    form.appendChild(inputTitulo);
-
-    const inputDescricao = document.createElement("input");
-    inputDescricao.type = "text";
-    inputDescricao.name = "novaDescricao";
-    inputDescricao.id = "novaDescricao";
-    inputDescricao.value = null;
-    inputDescricao.placeholder = "Nova descrição"
-    form.appendChild(inputDescricao);
-
-    const inputData = document.createElement("input");
-    inputData.type = "date";
-    inputData.name = "novaData";
-    inputData.id = "novaData";
-    inputData.value = null;
-    form.appendChild(inputData);
-
-    const botaoSalvar = document.createElement("button");
-    botaoSalvar.type = "submit";
-    botaoSalvar.textContent = "Salvar";
-    botaoSalvar.setAttribute('onclick', "EnviarTaskEdicao(" + taskId + ")")
-    form.appendChild(botaoSalvar);
-
-    formEditarTask.querySelector("h3").style.display = "none";
-    formEditarTask.querySelector("p").style.display = "none";
-    formEditarTask.appendChild(form);
-
-};
-
-function mostrarFormulario(){
-    const formulario = document.getElementById("formularioTasks")
-
-    if (formulario.style.display === "none"){
-        formulario.style.display = "block"
-    }else{
-        formulario.style.display = "none"        
-    }
+        if (formulario.style.display === "none"){
+            formulario.style.display = "block"
+        }else{
+            formulario.style.display = "none"        
+        }
+   },
 };
