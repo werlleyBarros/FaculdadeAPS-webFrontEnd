@@ -151,8 +151,7 @@ const manipuladorUser = {
         };
     },
 
-    htmlCreateTask: async function criarTask(event){
-        event.preventDefault();
+    htmlCreateTask: async function criarTask(){
 
         const titulo = document.getElementById("tituloTarefa").value;
         const descricao = document.getElementById("descricaoTarefa").value;

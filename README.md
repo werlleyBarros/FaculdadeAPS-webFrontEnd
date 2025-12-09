@@ -14,6 +14,13 @@ O usuário pode criar uma nova conta fornecendo um nome, email e senha.
 ### 3-Página de Gestão de tarefas(criação, visualização, edição e exclusão)
 Após o login, o usuário pode criar suas tarefas, visualizar, edita-lás ou excluí-las.
 
+## Participantes
+
+Weslley Souza Barros
+Lucas Ferreira Dias
+Eduardo de Carvalho
+
+
 ## Tecnologias Utilizadas
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
