@@ -13,7 +13,7 @@
 */
 
 //url do servidor
-const baseUrl = "https://expert-zebra-r7rw99599j7hppx5-8000.app.github.dev";
+const baseUrl = "https://humble-zebra-v6jjqpv7pgv53pv7-8000.app.github.dev";
 /* 
     função utilitaria para envio do servidor. de argumento obrigatorio somente endpoint (parte final da url).
     caso não envie nenhum outro parametro, usa o que está depois de = como padrão.
@@ -196,30 +196,39 @@ const domUser = {
         const fragment = document.createDocumentFragment();
 
         const card = document.createElement("div");
-        card.classList.add("tarefa-card");
+        card.classList.add("card");
+        card.classList.add("text-center");
+        card.classList.add("col-3");
         card.id = "tarefa-"+ task.id;
+
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body")
+        card.appendChild(cardBody)
 
         const titulo = document.createElement("h3");
         titulo.textContent = task.title;
-        card.appendChild(titulo);
-
-        const description = document.createElement("p");
-        description.textContent = task.description;
-        card.appendChild(description);
+        titulo.classList.add("card-title")
+        cardBody.appendChild(titulo);
 
         const deadline = document.createElement("p")
         deadline.textContent = "Prazo final: " + task.deadline;
-        card.appendChild(deadline);
+        deadline.classList.add("card-subtitle")
+        cardBody.appendChild(deadline);
+
+        const description = document.createElement("p");
+        description.textContent = task.description;
+        description.classList.add("card-text")
+        cardBody.appendChild(description);
 
         const botaoEditar = this.cBotao("Editar", "botaoEditar", this.cFormEdit.bind(this, task.id))
-        card.appendChild(botaoEditar);
+        cardBody.appendChild(botaoEditar);
 
         const botaoDeletar = this.cBotao("Deletar", "botaoDeletar", manipuladorUser.htmlDeleteTask.bind(null, task.id))
-        card.appendChild(botaoDeletar);
+        cardBody.appendChild(botaoDeletar);
 
         fragment.appendChild(card);
 
-        document.getElementById("tarefasContainer").appendChild(fragment);
+        document.getElementById("grupoContainer").appendChild(fragment);
    },
 
    cFormEdit: function formularioEdit(id){

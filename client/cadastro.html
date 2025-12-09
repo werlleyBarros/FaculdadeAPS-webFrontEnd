@@ -8,17 +8,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="formularios">
-        <form id="formularioCadastro">
-            <h2>Cadastro</h2>
-            <label for="nomeInput">Nome</label>
-            <input type="text" name="nomeInput" id="nomeInput" placeholder="Nome Completo">
-            <label for="emailInput">Email</label>
-            <input type="email" name="emailInput" id="emailInput" placeholder="MeuEmail@email.com">
-            <label for="senhaInput">Senha</label>
-            <input type="password" name="senhaInput" id="senhaInput" placeholder="MinhaSenha">
-            <button type="button" onclick="manipuladorUser.htmlCadastro()">Registrar-se</button>
-        </form>
+    <div class ="container" id="formularios">
+        <div = "row justify-content-md-center">
+            <form id="formularioCadastro">
+                <h2>Cadastro</h2>
+                <div class ="mb-3">
+                    <label for="nomeInput" class ="form-label">Nome</label>
+                    <input type="text" class = "form-control" name="nomeInput" id="nomeInput" placeholder="Nome Completo">
+                </div>
+                <div class ="mb-3">
+                    <label for="emailInput" class ="form-label">Email</label>
+                    <input type="email" class = "form-control" name="emailInput" id="emailInput" placeholder="MeuEmail@email.com">
+                </div>
+                <div class ="mb-3">
+                    <label for="senhaInput" class ="form-label">Senha</label>
+                    <input type="password" class = "form-control" name="senhaInput" id="senhaInput" placeholder="MinhaSenha"> 
+                </div>
+                <button type="button" class="button" onclick="manipuladorUser.htmlCadastro()">Registrar-se</button>
+            </form>
+        </div>
     </div>    
 </body>
 <script src="script.js"></script>
