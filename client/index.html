@@ -8,18 +8,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="formularios">
-        <form id="formularioLogin">
-            <h2>Login</h2>
-            <label for="emailInput">Email</label>
-            <input type="email" name="emailInput" id="emailInput" placeholder="MeuEmail@email.com">
-            <label for="senhaInput">Senha</label>
-            <input type="password" name="senhaInput" id="senhaInput" placeholder="MinhaSenha">
-            <button type="button" onclick="manipuladorUser.htmlLogin()">Fazer login</button>
-            <p>
-            Não possui uma conta? <a href="cadastro.html">Registre-se</a> 
-            </p>
-        </form>
+    <div class = "container" id="formularios">
+        <div = "row justify-content-md-center">
+            <form id="formularioLogin">
+                <h2>Login</h2>
+                <div class ="mb-3">
+                    <label for="emailInput" class ="form-label">Email</label>
+                    <input type="email" class = "form-control" name="emailInput" id="emailInput" placeholder="MeuEmail@email.com" >
+                </div>
+                <div class ="mb-3">
+                    <label for="senhaInput" class ="form-label">Senha</label>
+                    <input type="password" class = "form-control" name="senhaInput" id="senhaInput" placeholder="MinhaSenha">
+                </div>
+                <button type="button" class = "button" onclick="manipuladorUser.htmlLogin()">Fazer login</button>
+                <div class = "form-text">
+                    <p>
+                Não possui uma conta? <a href="cadastro.html">Registre-se</a> 
+                    </p>
+                </div>
+            </form>
+        </div>
+        
     </div>
 </body>
 <script src="script.js"></script>

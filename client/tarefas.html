@@ -6,12 +6,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="css/tarefas.css">
+    <link rel="stylesheet" href="tarefas.css">
     <title>To-do-list</title>
 </head>
 <body>
-    <button onclick="domUser.mostrarFormulario()">criar tarefa</button> 
-    <div id= "formularioTasks" class="formularioTasks" >
+    <button onclick="domUser.tasksForm()">criar tarefa</button> 
+    <div id= "formularioTasks" class="formularioTasks" style=display:none>
         <form id="formTasks" onsubmit="manipuladorUser.htmlCreateTask(event)">
             <label for="">Titulo</label>
             <input type="text" name="tituloTarefa" id="tituloTarefa" autocomplete="off">
@@ -22,8 +22,10 @@
             <button type="submit">Enviar</button>
         </form>
     </div>
-    <div class="tarefasContainer" id="tarefasContainer">
-        
+    <div class="container" id="tarefasContainer">
+        <div class="row row-cols-sm-1 row-cols-md-3 row-cols-lg-4  g-2" id="grupoContainer">
+
+        </div>
     </div>
 </body>
 <script src="script.js"></script>

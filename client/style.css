@@ -6,25 +6,14 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f4f4;
-    display: block;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
 }
 
-/* AQUI ESTÁ O TRUQUE: 
-   A vírgula diz para aplicar esse estilo no Login E no Cadastro 
-*/
 #formularioLogin, 
 #formularioCadastro {
     background-color: white;
-    max-width: 400px; /* Tamanho máximo bom para ambos */
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
 }
 
 /* Estilo dos Textos (Labels) */
@@ -36,24 +25,6 @@ label {
     font-size: 14px;
 }
 
-/* Inputs (Serve para texto, email e senha) */
-input {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #fff;
-    outline: none;
-    font-size: 14px;
-    box-sizing: border-box;
-    transition: all 0.3s;
-}
-
-input:focus {
-    border-color: #7D2AE8;
-    box-shadow: 0 0 0 3px rgba(125, 42, 232, 0.1);
-}
-
-/* Botão Roxo (Serve para ambos) */
 button {
     background-color: #7D2AE8;
     color: white;
@@ -65,6 +36,8 @@ button {
     cursor: pointer;
     margin-top: 30px;
     transition: background 0.3s;
+    width: 100%;
+
 }
 
 button:hover {
